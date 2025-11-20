@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+
 #define MAX_AREA 1024
 
 
@@ -120,7 +121,80 @@ pop(machine *m)
 }
 //[PUSH , 2 , PUSH , 1 ,  ADD , PRINTI , HALT]
 
-void runProgram(machine *m)
+
+#ifdef DEBUG
+
+void
+runProgram(machine *m)
+{
+    bool running = true;
+    int tos, sos;
+
+//wait for user to input start ...
+
+loop:
+        //fetch instruction
+        opcode curr = fetch(m);
+
+
+        //execute
+        switch(curr)
+        {
+            case PUSH:
+                int f = fetch(m);
+                push(m,f);
+
+
+                printf("PUSH  %d\n",f);
+                break;
+            case ADD:
+                tos = pop(m);
+                sos = pop(m);
+                push(m , sos + tos);   //TODO : check for overflow 
+                
+                printf("ADD\n");
+                break;
+            case PRINTI:
+                tos = pop(m);
+
+                printf("----------------------\n");
+                printf("%d\n", tos);
+                printf("----------------------\n");
+
+
+
+                printf("PRINTI\n");
+                break;
+
+            case HALT:
+                running = false ;
+
+                printf("HALT\n");
+                goto exit;
+                break;
+            default:
+                fprintf(stderr, "Unrecognized opcode\n");
+                break;
+        }
+
+
+        char q;
+        do
+        {
+            scanf("%c", &q);
+            if(q == 'n') goto loop;
+        }
+        while(q != 'q');
+exit:
+    
+
+}
+
+
+
+#else
+void 
+runProgram(machine *m)
 {
     bool running = true;
     int tos , sos ;
@@ -168,10 +242,13 @@ void runProgram(machine *m)
 
 }
 
+#endif
+
 
 int 
 main(int argc, char *argv[])
-{
+{   
+ 
     machine stags = (machine){0};
     if(initMachine(&stags) == EXIT_FAILURE)
     { 
