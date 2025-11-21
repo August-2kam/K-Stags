@@ -37,5 +37,10 @@ main(int argc, char *argv[])
     //free machine 
     if(stags.code) free(stags.code);
     if(stags.mem)  free(stags.mem);
+
+    //destroy the windows
+#ifdef DEBUG
+    destroyWindows();
+#endif
     return EXIT_SUCCESS;
 }
