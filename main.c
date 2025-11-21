@@ -24,9 +24,11 @@ main(int argc, char *argv[])
 
     //getCode 
     unsigned int size = getCode(&stags);
+    printf("%d\n", size);
 
     //run 
 #ifdef DEBUG
+    setDebugScreenProps(size);
     setScreen(&stags);
 #endif
     runProgram(&stags);

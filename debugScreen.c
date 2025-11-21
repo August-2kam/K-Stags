@@ -12,12 +12,15 @@ unsigned int SCREEN_HEI;
 unsigned int currentLine;
 
 void 
-setDebugScreens(unsigned int size)
+setDebugScreenProps(unsigned int size)
 {
      codeSize = size;
      getmaxyx(stdscr, SCREEN_HEI, SCREEN_WID);      //find the boundaries of the screen
      currentLine = 0;
+
 }
+
+
 
 
 const char* opcodeToString(const opcode op)
@@ -45,13 +48,14 @@ setScreen(machine *m)
     //print the code
     int k = 0;
     opcode op ;
-    while(k <= codeSize + 1)
+    while(k <= codeSize)
     {
         op = m->mem[k];
         switch(op)
         {
             // <OPCODE>   <OPERAND>
             case PUSH:
+                k+=1;
                 printw("%s   %d\n",opcodeToString(op), m->mem[k++] );
                 break;
 
@@ -59,10 +63,12 @@ setScreen(machine *m)
             case ADD:
             case HALT:
                 printw("%s\n", opcodeToString(op) );
+                k++;
                 break;
                 
             default:
                 printw("UNRECOGNIZED OP\n");
+                k++;
                 break;
         }
 
