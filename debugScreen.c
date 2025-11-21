@@ -34,6 +34,8 @@ unsigned int CODE_WIN_Y;
 unsigned int REG_WIN_X;
 unsigned int REG_WIN_Y;
 
+unsigned int renLineNum = 0;
+
 WINDOW *codeWindow;
 WINDOW *registersWindow;
 
@@ -111,7 +113,7 @@ setScreen(machine *m)
     codeWindow      = create_newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
     registersWindow = create_newwin(WIN_HEIGHT, WIN_WIDTH, REG_WIN_Y, REG_WIN_X);
 
-/*
+
     //print the code
     int k = 0;
     opcode op ;
@@ -123,14 +125,14 @@ setScreen(machine *m)
             // <OPCODE>   <OPERAND>
             case PUSH:
                 k+=1;
-                printw("%s   %d\n",opcodeToString(op), m->code[k++] );
+                mvwprintw(codeWindow, renLineNum + 1, 1, "%s %d", opcodeToString(op), m->code[k++]);
                 break;
 
             // <OPCODE>
             case ADD:
             case HALT:
             case PRINTI:
-                printw("%s\n", opcodeToString(op) );
+                mvwprintw(codeWindow, renLineNum + 1, 1, "%s", opcodeToString(op));
                 k++;
                 break;
                 
@@ -140,10 +142,12 @@ setScreen(machine *m)
                 break;
         }
 
+        renLineNum++;
+
     }
 
-*/
     refresh();
+    wrefresh(codeWindow);
     return;
 
 }
