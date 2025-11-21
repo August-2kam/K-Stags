@@ -147,6 +147,7 @@ loop:
 
 
 exit:
+        endwin();
     
 }
 
