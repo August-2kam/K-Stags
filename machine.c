@@ -5,6 +5,16 @@
 
 #include "machine.h"
 
+#ifdef  DEBUG
+    #include <ncurses.h>
+
+
+    unisigned int codeSize;
+    unsgined  int COLS,ROWS;
+    unsigned currentLine;
+
+#endif
+
 int 
 initMachine(machine *m)
 {
@@ -23,19 +33,15 @@ initMachine(machine *m)
 
 }
 
+
+//this modifies the instruction pointer ; must be  reset 
+// before calling the runProgram  function
 void OpcodeIntoCodeArea(machine *m, opcode a)
 {
     m->code[m->ip++] = a ;
 }
 
-/*
- * Push  1   ;[1]
- * push  2   ;[2,1]
- * ADD       ;[3]
- * PRINTI    ;[] ->PRINT 3 HERE 
- * HALT 
- *
-*/
+
 void
 getCode(machine *m)
 {
@@ -48,8 +54,15 @@ getCode(machine *m)
     OpcodeIntoCodeArea(m, HALT);
 
 
+
+
+#ifdef DEBUGCPDE
+    codeSize = m->ip;
+#endif
+
     //reset the ip
     m->ip = 0;
+
 }
 
 
@@ -94,7 +107,6 @@ pop(machine *m)
 
 
 #ifdef DEBUG
-
 void
 runProgram(machine *m)
 {
@@ -152,6 +164,7 @@ loop:
         char q;
         do
         {
+
             scanf("%c", &q);
             if(q == 'n') goto loop;
         }
