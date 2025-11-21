@@ -1,4 +1,4 @@
-#include <complex.h>
+#include <stdbool.h>
 #include <ncurses.h>
 #include "debugScreen.h"
 #include "machine.h"
@@ -6,7 +6,6 @@
 
 
 unsigned int codeSize;
-unsigned int currentLine;
 
 unsigned int SCREEN_HEI;
 unsigned int SCREEN_WID;
@@ -34,7 +33,10 @@ unsigned int CODE_WIN_Y;
 unsigned int REG_WIN_X;
 unsigned int REG_WIN_Y;
 
-unsigned int renLineNum = 0;
+unsigned int renLineNum  = 0;
+unsigned int currentLine;
+
+bool printColor;
 
 WINDOW *codeWindow;
 WINDOW *registersWindow;
@@ -79,7 +81,15 @@ setDebugScreenProps(unsigned int size)
      currentLine = 0;
 
 
+     //init  the color properties 
+    if(has_colors() == FALSE)
+	{	
+        printColor = false;
+        
+	}
 
+    start_color();
+    init_pair(1, COLOR_RED, COLOR_BLUE);
 
 }
 
@@ -107,7 +117,8 @@ setScreen(machine *m)
 
     initscr();
 	cbreak();
-	keypad(stdscr, TRUE);	
+	keypad(stdscr, TRUE);
+    renLineNum = 0;
 
     refresh();
     codeWindow      = create_newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
@@ -117,22 +128,28 @@ setScreen(machine *m)
     //print the code
     int k = 0;
     opcode op ;
-    while(k < codeSize)
+    while(k < codeSize)     
     {
+        //set the color
+        if(currentLine == renLineNum)
+            attron(COLOR_PAIR(1));
+
+        //get the opcode
         op = m->code[k];
+
         switch(op)
         {
             // <OPCODE>   <OPERAND>
             case PUSH:
                 k+=1;
-                mvwprintw(codeWindow, renLineNum + 1, 1, "%s %d", opcodeToString(op), m->code[k++]);
+                mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10 , "%s %d", opcodeToString(op), m->code[k++]);
                 break;
 
             // <OPCODE>
             case ADD:
             case HALT:
             case PRINTI:
-                mvwprintw(codeWindow, renLineNum + 1, 1, "%s", opcodeToString(op));
+                mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10, "%s", opcodeToString(op));
                 k++;
                 break;
                 
@@ -141,9 +158,10 @@ setScreen(machine *m)
                 k++;
                 break;
         }
+        if(currentLine == renLineNum)
+            attroff(COLOR_PAIR(1));
 
         renLineNum++;
-
     }
 
     refresh();
@@ -155,9 +173,12 @@ setScreen(machine *m)
 void
 updateScreen(machine *m)
 {
+    currentLine++;
     return;
 
 }
+
+
 
 
 WINDOW*
