@@ -19,6 +19,8 @@ unsigned int WIN_PADDING_BOTTOM;
 unsigned int WIN_PADDING_TOP;
 
 
+unsigned int WIN_HEIGHT;
+unsigned int WIN_WIDTH;
 
 WINDOW *codeWindow;
 WINDOW *registersWindow;
@@ -45,6 +47,10 @@ setDebugScreenProps(unsigned int size)
     WIN_PADDING_BOTTOM = SCREEN_HEI*0.7;
     WIN_PADDING_TOP = SCREEN_HEI*0.1;
 
+    WIN_HEIGHT = WIN_PADDING_TOP - WIN_PADDING_BOTTOM;
+    WIN_WIDTH  =  SCREEN_WID * 0.6;
+
+
 }
 
 
@@ -70,6 +76,10 @@ setScreen(machine *m)
 {
 
     initscr();
+	cbreak();
+	keypad(stdscr, TRUE);	
+
+    codeWindow = create_newwin(50 , 50 , 10 , 10);
 
 
     //print the code
