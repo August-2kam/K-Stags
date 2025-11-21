@@ -96,7 +96,6 @@ pop(machine *m)
     
     return m->mem[++m->sp];
 }
-//[PUSH , 2 , PUSH , 1 ,  ADD , PRINTI , HALT]
 
 
 #ifdef DEBUG
@@ -105,8 +104,8 @@ runProgram(machine *m)
 {
     bool running = true;
     int tos, sos;
+    keypad(stdscr, TRUE);
 
-//wait for user to input start ...
 
 loop:
         //fetch instruction
@@ -154,14 +153,9 @@ loop:
         }
 
 
-        char q;
-        do
-        {
+        int ch = getch();
 
-            scanf("%c", &q);
-            if(q == 'n') goto loop;
-        }
-        while(q != 'q');
+        if(ch == '\n' || ch == KEY_ENTER || ch == '\r') goto loop;
 exit:
     
 

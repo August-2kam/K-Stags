@@ -6,6 +6,9 @@
 
 #include "machine.h"
 
+#ifdef DEBUG 
+    #include "debugScreen.h"
+#endif
 
 int 
 main(int argc, char *argv[])
@@ -23,6 +26,9 @@ main(int argc, char *argv[])
     unsigned int size = getCode(&stags);
 
     //run 
+#ifdef DEBUG
+    setScreen(&stags);
+#endif
     runProgram(&stags);
 
 

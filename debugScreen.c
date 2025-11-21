@@ -45,7 +45,7 @@ setScreen(machine *m)
     //print the code
     int k = 0;
     opcode op ;
-    while(k <= codeSize)
+    while(k <= codeSize + 1)
     {
         op = m->mem[k];
         switch(op)
