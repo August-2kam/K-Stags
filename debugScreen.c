@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <ncurses.h>
+#include <stdio.h>
 #include "debugScreen.h"
 #include "machine.h"
 
@@ -132,6 +133,7 @@ setScreen(machine *m)
     {
         //set the color
         if(currentLine == renLineNum)
+            printf("yes");
             attron(COLOR_PAIR(1));
 
         //get the opcode
