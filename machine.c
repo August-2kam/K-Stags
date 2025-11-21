@@ -118,33 +118,20 @@ loop:
             case PUSH:
                 int f = fetch(m);
                 push(m,f);
-
-
-                printf("PUSH  %d\n",f);
                 break;
             case ADD:
                 tos = pop(m);
                 sos = pop(m);
                 push(m , sos + tos);   //TODO : check for overflow 
                 
-                printf("ADD\n");
                 break;
             case PRINTI:
                 tos = pop(m);
-
-                printf("----------------------\n");
                 printf("%d\n", tos);
-                printf("----------------------\n");
-
-
-
-                printf("PRINTI\n");
                 break;
 
             case HALT:
                 running = false ;
-
-                printf("HALT\n");
                 goto exit;
                 break;
             default:
@@ -152,13 +139,15 @@ loop:
                 break;
         }
 
-
+        while(true)
+        {
         int ch = getch();
-
         if(ch == '\n' || ch == KEY_ENTER || ch == '\r') goto loop;
+        }
+
+
 exit:
     
-
 }
 
 
