@@ -9,10 +9,6 @@
     #include <ncurses.h>
 
 
-    unisigned int codeSize;
-    unsgined  int COLS,ROWS;
-    unsigned currentLine;
-
 #endif
 
 int 
@@ -42,9 +38,10 @@ void OpcodeIntoCodeArea(machine *m, opcode a)
 }
 
 
-void
+unsigned int
 getCode(machine *m)
 {
+    unsigned int size;
     OpcodeIntoCodeArea(m, PUSH);
     OpcodeIntoCodeArea(m, 1);
     OpcodeIntoCodeArea(m, PUSH);
@@ -53,16 +50,12 @@ getCode(machine *m)
     OpcodeIntoCodeArea(m, PRINTI);
     OpcodeIntoCodeArea(m, HALT);
 
-
-
-
-#ifdef DEBUGCPDE
-    codeSize = m->ip;
-#endif
+    size = m->ip;
 
     //reset the ip
     m->ip = 0;
 
+    return size;
 }
 
 

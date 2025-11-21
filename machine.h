@@ -37,5 +37,5 @@ typedef struct
 } machine;
 
 int initMachine(machine *m);
-void getCode(machine *m);
+unsigned int getCode(machine *m);
 void runProgram(machine *m);

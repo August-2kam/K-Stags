@@ -20,7 +20,7 @@ main(int argc, char *argv[])
     }
 
     //getCode 
-    getCode(&stags);
+    unsigned int size = getCode(&stags);
 
     //run 
     runProgram(&stags);
