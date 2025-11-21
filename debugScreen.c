@@ -1,3 +1,4 @@
+#include <complex.h>
 #include <ncurses.h>
 #include "debugScreen.h"
 #include "machine.h"
@@ -5,18 +6,25 @@
 
 
 unsigned int codeSize;
-
-unsigned int SCREEN_WID;
-unsigned int SCREEN_HEI;            
 unsigned int currentLine;
 
-unsigned int PADDING_LEFT;
-unsigned int PADDING_RIGHT;
-unsigned int PADDING_TOP;
-unsigned int PADDING_BOTTOM;
+unsigned int SCREEN_HEI;
+unsigned int SCREEN_WID;
 
-unsigned int WIN_PADDING_BOTTOM;
-unsigned int WIN_PADDING_TOP;
+
+float PAD_LEFT_PER = 0.10;
+float PAD_RIGHT_PER = 0.10;
+float PAD_TOP_PER = 0.10;
+float PAD_BOTTOM_PER = 0.30;
+
+int PAD_LEFT;
+int PAD_RIGHT;
+int PAD_TOP;
+int PAD_BOTTOM;
+
+int USABLE_W;
+int USABLE_H;
+
 
 
 unsigned int WIN_HEIGHT;
@@ -35,20 +43,27 @@ void destroy_win(WINDOW *local_win);
 void 
 setDebugScreenProps(unsigned int size)
 {
+    initscr();
+
+    SCREEN_WID = COLS;
+    SCREEN_HEI = LINES;
+
+
+
+    PAD_LEFT   = (int)(SCREEN_WID * PAD_LEFT_PER);
+    PAD_RIGHT  = (int)(SCREEN_WID * PAD_RIGHT_PER);
+    PAD_TOP    = (int)(SCREEN_HEI * PAD_TOP_PER);
+    PAD_BOTTOM = (int)(SCREEN_HEI * PAD_BOTTOM_PER);
+
+    USABLE_W   = SCREEN_WID - PAD_LEFT - PAD_RIGHT;
+    USABLE_H   = SCREEN_HEI - PAD_TOP - PAD_BOTTOM;
+
     //code rendering properties 
      codeSize = size;
      getmaxyx(stdscr, SCREEN_HEI, SCREEN_WID);      //find the boundaries of the screen
      currentLine = 0;
 
-    // windows properties
-    PADDING_LEFT   = SCREEN_WID*0.05;
-    PADDING_RIGHT  = SCREEN_WID*0.05;
 
-    WIN_PADDING_BOTTOM = SCREEN_HEI*0.7;
-    WIN_PADDING_TOP = SCREEN_HEI*0.1;
-
-    WIN_HEIGHT = (double)LINES * 0.6 ;
-    WIN_WIDTH  = (double)COLS * 0.4;
 
 
 }
@@ -80,7 +95,8 @@ setScreen(machine *m)
 	keypad(stdscr, TRUE);	
 
     refresh();
-    codeWindow = create_newwin(LINES - 10, COLS - 10 , 10, 10);
+    codeWindow = create_newwin( USABLE_H , USABLE_W/2, PAD_TOP, PAD_LEFT); 
+    registersWindow = create_newwin( USABLE_H , USABLE_W/2,PAD_TOP, PAD_LEFT + USABLE_W/2); 
 
 /*
     //print the code
