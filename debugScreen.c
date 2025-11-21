@@ -47,8 +47,8 @@ setDebugScreenProps(unsigned int size)
     WIN_PADDING_BOTTOM = SCREEN_HEI*0.7;
     WIN_PADDING_TOP = SCREEN_HEI*0.1;
 
-    WIN_HEIGHT = WIN_PADDING_TOP - WIN_PADDING_BOTTOM;
-    WIN_WIDTH  =  SCREEN_WID * 0.6;
+    WIN_HEIGHT = (double)LINES * 0.6 ;
+    WIN_WIDTH  = (double)COLS * 0.4;
 
 
 }
@@ -79,9 +79,10 @@ setScreen(machine *m)
 	cbreak();
 	keypad(stdscr, TRUE);	
 
-    codeWindow = create_newwin(50 , 50 , 10 , 10);
+    refresh();
+    codeWindow = create_newwin(LINES - 10, COLS - 10 , 10, 10);
 
-
+/*
     //print the code
     int k = 0;
     opcode op ;
@@ -111,6 +112,8 @@ setScreen(machine *m)
         }
 
     }
+
+*/
     refresh();
     return;
 
