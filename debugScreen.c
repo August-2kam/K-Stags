@@ -123,9 +123,18 @@ setScreen(machine *m)
     renLineNum = 0;
 
 
-    refresh();
+    //create the windows
     codeWindow      = create_newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
     registersWindow = create_newwin(WIN_HEIGHT, WIN_WIDTH, REG_WIN_Y, REG_WIN_X);
+
+    //coloring
+    start_color();
+    use_default_colors();
+    init_pair(1, COLOR_RED, COLOR_BLUE);
+
+    //draw the boxes
+    wrefresh(codeWindow);
+    wrefresh(registersWindow);
 
 
     //print the code
@@ -136,7 +145,7 @@ setScreen(machine *m)
         //set the color
         if(currentLine == renLineNum)
         {
-            attron(COLOR_PAIR(1));
+            wattron(codeWindow, COLOR_PAIR(1) | A_BOLD);
             currLinePointeri = ">";
 
         }
@@ -149,11 +158,7 @@ setScreen(machine *m)
             // <OPCODE>   <OPERAND>
             case PUSH:
                 k+=1;
-
-                attron(COLOR_PAIR(1));
                 mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10 , "%s%s %d", currLinePointeri, opcodeToString(op), m->code[k++]);
-                attroff(COLOR_PAIR(1));
-
                 break;
 
             // <OPCODE>
@@ -171,7 +176,8 @@ setScreen(machine *m)
         }
         if(currentLine == renLineNum)
         {
-            attroff(COLOR_PAIR(1));
+
+            wattroff(codeWindow, COLOR_PAIR(1) | A_BOLD);
             currLinePointeri = " ";
         }
 
