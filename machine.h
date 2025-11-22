@@ -19,7 +19,7 @@ typedef enum
     NO_OPCODE
 }opcode;
 
-
+#define  NUM_REGISTERS 3
 typedef struct 
 {
     //registers 

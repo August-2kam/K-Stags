@@ -112,6 +112,17 @@ const char* opcodeToString(const opcode op)
 
 }
 
+void 
+printRegisters(machine *m)
+{
+    int x = 2;
+
+    mvwprintw(registersWindow, 10 , x , "IP: %d", m->ip  );
+    mvwprintw(registersWindow, 15 , x , "SP: %d", m->sp  );
+    mvwprintw(registersWindow, 20 , x , "HP: %d", m->hp  );
+
+}
+
 void
 setScreen(machine *m)
 {
@@ -124,6 +135,7 @@ setScreen(machine *m)
 
 
     //create the windows
+    refresh();
     codeWindow      = create_newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
     registersWindow = create_newwin(WIN_HEIGHT, WIN_WIDTH, REG_WIN_Y, REG_WIN_X);
 
@@ -135,20 +147,29 @@ setScreen(machine *m)
     //draw the boxes
     wrefresh(codeWindow);
     wrefresh(registersWindow);
-
+    refresh();
+    refresh();
 
     //print the code
     int k = 0;
     opcode op ;
     while(k < codeSize)     
     {
-        //set the color
+        //set the color if the current  executed line is the one being drawn
         if(currentLine == renLineNum)
         {
             wattron(codeWindow, COLOR_PAIR(1) | A_BOLD);
             currLinePointeri = ">";
 
         }
+
+        //cordinates inside the inner area
+        int y = renLineNum + 1;
+        int x = 2;
+
+        //dont print outside the window 
+        if(y >= (WIN_WIDTH -1 )) break;
+
 
         //get the opcode
         op = m->code[k];
@@ -158,14 +179,14 @@ setScreen(machine *m)
             // <OPCODE>   <OPERAND>
             case PUSH:
                 k+=1;
-                mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10 , "%s%s %d", currLinePointeri, opcodeToString(op), m->code[k++]);
+                mvwprintw(codeWindow, y, x , "%s%s %d", currLinePointeri, opcodeToString(op), m->code[k++]);
                 break;
 
             // <OPCODE>
             case ADD:
             case HALT:
             case PRINTI:
-                mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10, "%s%s",currLinePointeri, opcodeToString(op));
+                mvwprintw(codeWindow, y, x, "%s%s",currLinePointeri, opcodeToString(op));
                 k++;
                 break;
                 
@@ -184,8 +205,13 @@ setScreen(machine *m)
         renLineNum++;
     }
 
+    //print the registers
+    printRegisters(m);
+
+    //write to the windows
     refresh();
     wrefresh(codeWindow);
+    wrefresh(registersWindow);
     return;
 
 }
@@ -244,5 +270,6 @@ destroyWindows()
 {
     destroy_win(codeWindow);
     destroy_win(registersWindow);
+    endwin();
 }
 
