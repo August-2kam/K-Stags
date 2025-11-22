@@ -7,7 +7,7 @@
 
 #ifdef  DEBUG
     #include <ncurses.h>
-
+    #include "debugScreen.h"
 
 #endif
 
@@ -141,8 +141,12 @@ loop:
 
         while(true)
         {
-        int ch = getch();
-        if(ch == '\n' || ch == KEY_ENTER || ch == '\r') goto loop;
+            int ch = getch();
+            if(ch == '\n' || ch == KEY_ENTER || ch == '\r') 
+            {
+               updateScreen(m); 
+               goto loop;
+            }
         }
 
 

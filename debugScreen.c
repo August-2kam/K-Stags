@@ -35,7 +35,7 @@ unsigned int REG_WIN_X;
 unsigned int REG_WIN_Y;
 
 unsigned int renLineNum  = 0;
-unsigned int currentLine;
+unsigned int currentLine = 0;
 
 bool printColor;
 
@@ -115,11 +115,13 @@ const char* opcodeToString(const opcode op)
 void
 setScreen(machine *m)
 {
+    char *currLinePointeri = " ";
 
     initscr();
 	cbreak();
 	keypad(stdscr, TRUE);
     renLineNum = 0;
+
 
     refresh();
     codeWindow      = create_newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
@@ -133,8 +135,11 @@ setScreen(machine *m)
     {
         //set the color
         if(currentLine == renLineNum)
-            printf("yes");
+        {
             attron(COLOR_PAIR(1));
+            currLinePointeri = ">";
+
+        }
 
         //get the opcode
         op = m->code[k];
@@ -144,14 +149,18 @@ setScreen(machine *m)
             // <OPCODE>   <OPERAND>
             case PUSH:
                 k+=1;
-                mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10 , "%s %d", opcodeToString(op), m->code[k++]);
+
+                attron(COLOR_PAIR(1));
+                mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10 , "%s%s %d", currLinePointeri, opcodeToString(op), m->code[k++]);
+                attroff(COLOR_PAIR(1));
+
                 break;
 
             // <OPCODE>
             case ADD:
             case HALT:
             case PRINTI:
-                mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10, "%s", opcodeToString(op));
+                mvwprintw(codeWindow, renLineNum + 5, WIN_WIDTH/2 - 10, "%s%s",currLinePointeri, opcodeToString(op));
                 k++;
                 break;
                 
@@ -161,7 +170,10 @@ setScreen(machine *m)
                 break;
         }
         if(currentLine == renLineNum)
+        {
             attroff(COLOR_PAIR(1));
+            currLinePointeri = " ";
+        }
 
         renLineNum++;
     }
@@ -176,6 +188,8 @@ void
 updateScreen(machine *m)
 {
     currentLine++;
+    setScreen(m);attroff(COLOR_PAIR(1));
+
     return;
 
 }
