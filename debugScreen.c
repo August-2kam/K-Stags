@@ -126,7 +126,7 @@ printRegisters(machine *m)
 void
 printMem(machine *m)
 {
-    //print the stack 
+    //----print the stack----- 
     int y = SCREEN_HEI - PAD_BOTTOM + 5 ;
     int x = PAD_LEFT;
 
@@ -138,7 +138,7 @@ printMem(machine *m)
         x+= 2;
     }
 
-    //print the heap 
+    //--------print the heap--------- 
     int y1 = SCREEN_HEI - PAD_BOTTOM + 7 ;
     int x1 = PAD_LEFT;
 
@@ -260,7 +260,106 @@ updateScreen(machine *m)
 
 }
 
+/*
+ void
+setScreen(machine *m)
+{
+    char *currLinePointeri = " ";
 
+    initscr();
+	cbreak();
+	keypad(stdscr, TRUE);
+    renLineNum = 0;
+
+
+    //create the windows
+    refresh();
+    codeWindow      = create_newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
+    registersWindow = create_newwin(WIN_HEIGHT, WIN_WIDTH, REG_WIN_Y, REG_WIN_X);
+
+    //coloring
+    start_color();
+    use_default_colors();
+    init_pair(1, COLOR_RED, COLOR_BLUE);
+
+    //draw the boxes
+    wrefresh(codeWindow);
+    wrefresh(registersWindow);
+    refresh();
+    refresh();
+
+    //print the code
+    int k = 0;
+    opcode op ;
+    while(k < codeSize)     
+    {
+        //set the color if the current  executed line is the one being drawn
+        if(currentLine == renLineNum)
+        {
+            wattron(codeWindow, COLOR_PAIR(1) | A_BOLD);
+            currLinePointeri = ">";
+
+        }
+
+        //cordinates inside the inner area
+        int y = renLineNum + 1;
+        int x = 2;
+
+        //dont print outside the window 
+        if(y >= (WIN_WIDTH -1 )) break;
+
+
+        //get the opcode
+        op = m->code[k];
+
+        switch(op)
+        {
+            // <OPCODE>   <OPERAND>
+            case PUSH:
+                k+=1;
+                mvwprintw(codeWindow, y, x , "%s%s %d", currLinePointeri, opcodeToString(op), m->code[k++]);
+                break;
+
+            // <OPCODE>
+            case ADD:
+            case HALT:
+            case PRINTI:
+                mvwprintw(codeWindow, y, x, "%s%s",currLinePointeri, opcodeToString(op));
+                k++;
+                break;
+                
+            default:
+                printw("UNRECOGNIZED OP\n");
+                k++;
+                break;
+        }
+        if(currentLine == renLineNum)
+        {
+
+            wattroff(codeWindow, COLOR_PAIR(1) | A_BOLD);
+            currLinePointeri = " ";
+        }
+
+        renLineNum++;
+    }
+
+    //print the registers
+    printRegisters(m);
+    refresh();
+
+    //print the stack an heap
+    printMem(m);
+
+
+
+    //write to the windows
+    refresh();
+    wrefresh(codeWindow);
+    wrefresh(registersWindow);
+    return;
+
+}
+ */
 
 
 WINDOW*
