@@ -18,8 +18,8 @@ initMachine(machine *m)
     m->sp = MAX_AREA - 1;    //MEMORY heap at start-->[   ]<-- stack at the end 
     m->hp = 0;
     
-    m->code = malloc(MAX_AREA);
-    m->mem =  malloc(MAX_AREA);
+    m->code = calloc(MAX_AREA, sizeof(int));
+    m->mem =  calloc(MAX_AREA, sizeof(int));
 
     
     if(!m->code) return  EXIT_FAILURE; 
@@ -46,6 +46,12 @@ getCode(machine *m)
     OpcodeIntoCodeArea(m, 1);
     OpcodeIntoCodeArea(m, PUSH);
     OpcodeIntoCodeArea(m, 2);
+    OpcodeIntoCodeArea(m, PUSH);
+    OpcodeIntoCodeArea(m, 2);
+    OpcodeIntoCodeArea(m, PUSH);
+    OpcodeIntoCodeArea(m, 5);
+    OpcodeIntoCodeArea(m, ADD);
+    OpcodeIntoCodeArea(m, ADD);
     OpcodeIntoCodeArea(m, ADD);
     OpcodeIntoCodeArea(m, PRINTI);
     OpcodeIntoCodeArea(m, HALT);
@@ -93,8 +99,9 @@ int
 pop(machine *m)
 {
     if(m->sp >= MAX_AREA) return 0 ; //nothing to pop
-    
-    return m->mem[++m->sp];
+    int k = m->mem[++m->sp];
+    m->mem[m->sp] = 0;
+    return k;
 }
 
 

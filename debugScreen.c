@@ -124,6 +124,34 @@ printRegisters(machine *m)
 }
 
 void
+printMem(machine *m)
+{
+    //print the stack 
+    int y = SCREEN_HEI - PAD_BOTTOM + 5 ;
+    int x = PAD_LEFT;
+
+
+    int k = m->sp;
+    while(x < (SCREEN_WID - PAD_RIGHT) && k <  MAX_AREA)
+    {
+        mvprintw(y, x, "%d ", m->mem[k++]);
+        x+= 2;
+    }
+
+    //print the heap 
+    int y1 = SCREEN_HEI - PAD_BOTTOM + 7 ;
+    int x1 = PAD_LEFT;
+
+
+    int k1 = m->hp;
+    while(x1 < (SCREEN_WID - PAD_RIGHT) && k1 >=0)
+    {
+        mvprintw(y1, x1, "%d ", m->mem[k++]);
+        x1 += 2;
+    }
+}
+
+void
 setScreen(machine *m)
 {
     char *currLinePointeri = " ";
@@ -207,6 +235,12 @@ setScreen(machine *m)
 
     //print the registers
     printRegisters(m);
+    refresh();
+
+    //print the stack an heap
+    printMem(m);
+
+
 
     //write to the windows
     refresh();
