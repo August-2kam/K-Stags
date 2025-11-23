@@ -1,3 +1,4 @@
+#include <endian.h>
 #include <stdbool.h>
 #include <ncurses.h>
 #include <stdio.h>
@@ -44,6 +45,7 @@ WINDOW *registersWindow;
 
 
 WINDOW *create_newwin(int height, int width, int starty, int startx);
+void drawWindows();
 void destroy_win(WINDOW *local_win);
 
 
@@ -53,6 +55,10 @@ void
 setDebugScreenProps(unsigned int size)
 {
     initscr();
+    cbreak();
+    nocbreak();
+    keypad(stdscr, TRUE);
+    curs_set(0);
 
     //window measurements
     SCREEN_WID = COLS;
@@ -78,7 +84,6 @@ setDebugScreenProps(unsigned int size)
 
     //code rendering properties 
      codeSize = size;
-     getmaxyx(stdscr, SCREEN_HEI, SCREEN_WID);      //find the boundaries of the screen
      currentLine = 0;
 
 
@@ -90,7 +95,23 @@ setDebugScreenProps(unsigned int size)
 	}
 
     start_color();
+    use_default_colors();
     init_pair(1, COLOR_RED, COLOR_BLUE);
+
+
+    //create the windows
+    codeWindow      = newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
+    registersWindow = newwin(WIN_HEIGHT, WIN_WIDTH, REG_WIN_Y, REG_WIN_X);
+
+    //draw the window boxes 
+    drawWindows();
+
+    //show initial state 
+//    wnoutrefresh(codeWindow);
+  
+
+    //outrefresh(registersWindow);
+    doupdate();
 
 }
 
@@ -121,6 +142,7 @@ printRegisters(machine *m)
     mvwprintw(registersWindow, 15 , x , "SP: %d", m->sp  );
     mvwprintw(registersWindow, 20 , x , "HP: %d", m->hp  );
 
+
 }
 
 void
@@ -135,9 +157,6 @@ printMem(machine *m)
     int y = SCREEN_HEI - PAD_BOTTOM + 5 ;
     int x = PAD_LEFT;
 
-    //clear the line where the stack will be printed
-    for(int  cx = X0 ; cx < X_END ; ++cx) mvaddch(y, cx, ' ');
-
 
     int k = m->sp;
     while(x < X_END && k < MAX_AREA)
@@ -149,9 +168,6 @@ printMem(machine *m)
     //--------print the heap--------- 
     int y1 = SCREEN_HEI - PAD_BOTTOM + 7 ;
     int x1 = PAD_LEFT;
-
-    //clear the screen 
-    for(int hx = X0 ; hx < X_END ; ++hx) mvaddch(y1,hx,' ');
 
 
     int k1 = m->hp;
@@ -169,27 +185,14 @@ setScreen(machine *m)
 {
     char *currLinePointeri = " ";
 
-    initscr();
-	cbreak();
-	keypad(stdscr, TRUE);
+
     renLineNum = 0;
 
 
-    //create the windows
-    refresh();
-    codeWindow      = create_newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
-    registersWindow = create_newwin(WIN_HEIGHT, WIN_WIDTH, REG_WIN_Y, REG_WIN_X);
 
-    //coloring
-    start_color();
-    use_default_colors();
-    init_pair(1, COLOR_RED, COLOR_BLUE);
+    //dr
+    drawWindows();
 
-    //draw the boxes
-    wrefresh(codeWindow);
-    wrefresh(registersWindow);
-    refresh();
-    refresh();
 
     //print the code
     int k = 0;
@@ -252,8 +255,6 @@ setScreen(machine *m)
 
     //print the stack an heap
     printMem(m);
-
-
 
     //write to the windows
     refresh();
@@ -273,149 +274,31 @@ updateScreen(machine *m)
 
 }
 
-/*
- void
-setScreen(machine *m)
+
+
+
+void
+drawWindows()
 {
-    char *currLinePointeri = " ";
+    //erase the content 
+    werase(codeWindow);
+    werase(registersWindow);
 
-    initscr();
-	cbreak();
-	keypad(stdscr, TRUE);
-    renLineNum = 0;
+    //draw the boxes 
+    box(codeWindow, 0 , 0 );
+    box(registersWindow, 0, 0);
 
-
-    //create the windows
-    refresh();
-    codeWindow      = create_newwin(WIN_HEIGHT, WIN_WIDTH, CODE_WIN_Y, CODE_WIN_X); 
-    registersWindow = create_newwin(WIN_HEIGHT, WIN_WIDTH, REG_WIN_Y, REG_WIN_X);
-
-    //coloring
-    start_color();
-    use_default_colors();
-    init_pair(1, COLOR_RED, COLOR_BLUE);
-
-    //draw the boxes
+    //refresh windows
     wrefresh(codeWindow);
     wrefresh(registersWindow);
-    refresh();
-    refresh();
 
-    //print the code
-    int k = 0;
-    opcode op ;
-    while(k < codeSize)     
-    {
-        //set the color if the current  executed line is the one being drawn
-        if(currentLine == renLineNum)
-        {
-            wattron(codeWindow, COLOR_PAIR(1) | A_BOLD);
-            currLinePointeri = ">";
-
-        }
-
-        //cordinates inside the inner area
-        int y = renLineNum + 1;
-        int x = 2;
-
-        //dont print outside the window 
-        if(y >= (WIN_WIDTH -1 )) break;
-
-
-        //get the opcode
-        op = m->code[k];
-
-        switch(op)
-        {
-            // <OPCODE>   <OPERAND>
-            case PUSH:
-                k+=1;
-                mvwprintw(codeWindow, y, x , "%s%s %d", currLinePointeri, opcodeToString(op), m->code[k++]);
-                break;
-
-            // <OPCODE>
-            case ADD:
-            case HALT:
-            case PRINTI:
-                mvwprintw(codeWindow, y, x, "%s%s",currLinePointeri, opcodeToString(op));
-                k++;
-                break;
-                
-            default:
-                printw("UNRECOGNIZED OP\n");
-                k++;
-                break;
-        }
-        if(currentLine == renLineNum)
-        {
-
-            wattroff(codeWindow, COLOR_PAIR(1) | A_BOLD);
-            currLinePointeri = " ";
-        }
-
-        renLineNum++;
-    }
-
-    //print the registers
-    printRegisters(m);
-    refresh();
-
-    //print the stack an heap
-    printMem(m);
-
-
-
-    //write to the windows
-    refresh();
-    wrefresh(codeWindow);
-    wrefresh(registersWindow);
-    return;
-
-}
- */
-
-
-WINDOW*
-create_newwin(int height, int width, int starty, int startx)
-{	WINDOW *local_win;
-
-	local_win = newwin(height, width, starty, startx);
-	box(local_win, 0 , 0);		/* 0, 0 gives default characters 
-					 * for the vertical and horizontal
-					 * lines			*/
-	wrefresh(local_win);		/* machine *mShow machine *mthat machine *mbox 		*/
-
-	return local_win;
-}
-
-void 
-destroy_win(WINDOW *local_win)
-{	
-	/* box(local_win, ' ', ' '); : This won't produce the desired
-	 * result of erasing the window. It will leave it's four corners 
-	 * and so an ugly remnant of window. 
-	 */
-	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
-	/* The parameters taken are 
-	 * 1. win: the window on which to operate
-	 * 2. ls: character to be used for the left side of the window 
-	 * 3. rs: character to be used for the right side of the window 
-	 * 4. ts: character to be used for the top side of the window 
-	 * 5. bs: character to be used for the bottom side of the window 
-	 * 6. tl: character to be used for the top left corner of the window 
-	 * 7. tr: character to be used for the top right corner of the window 
-	 * 8. bl: character to be used for the bottom left corner of the window 
-	 * 9. br: character to be used for the bottom right corner of the window
-	 */
-	wrefresh(local_win);
-	delwin(local_win);
 }
 
 void 
 destroyWindows()
 {
-    destroy_win(codeWindow);
-    destroy_win(registersWindow);
+    if(codeWindow) delwin(codeWindow);
+    if(registersWindow) delwin(registersWindow);
     endwin();
 }
 
