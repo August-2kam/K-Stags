@@ -126,13 +126,21 @@ printRegisters(machine *m)
 void
 printMem(machine *m)
 {
+    const int X_END = SCREEN_WID - PAD_RIGHT;
+    const int X0    = PAD_LEFT;
+
+
+
     //----print the stack----- 
     int y = SCREEN_HEI - PAD_BOTTOM + 5 ;
     int x = PAD_LEFT;
 
+    //clear the line where the stack will be printed
+    for(int  cx = X0 ; cx < X_END ; ++cx) mvaddch(y, cx, ' ');
+
 
     int k = m->sp;
-    while(x < (SCREEN_WID - PAD_RIGHT) && k <  MAX_AREA)
+    while(x < X_END && k < MAX_AREA)
     {
         mvprintw(y, x, "%d ", m->mem[k++]);
         x+= 2;
@@ -144,11 +152,13 @@ printMem(machine *m)
 
 
     int k1 = m->hp;
-    while(x1 < (SCREEN_WID - PAD_RIGHT) && k1 >=0)
+    while(x1 < X_END && k1 >=0)
     {
-        mvprintw(y1, x1, "%d ", m->mem[k++]);
+        mvprintw(y1, x1, "%d ", m->mem[k1--]);
         x1 += 2;
     }
+
+    refresh();
 }
 
 void
