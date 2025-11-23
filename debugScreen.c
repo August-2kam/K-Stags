@@ -44,6 +44,7 @@ WINDOW *codeWindow;
 WINDOW *registersWindow;
 
 
+
 WINDOW *create_newwin(int height, int width, int starty, int startx);
 void drawWindows();
 void destroy_win(WINDOW *local_win);
@@ -107,7 +108,8 @@ setDebugScreenProps(unsigned int size)
     drawWindows();
 
     //show initial state 
-//    wnoutrefresh(codeWindow);
+    wnoutrefresh(codeWindow);
+    wnoutrefresh(registersWindow);
   
 
     //outrefresh(registersWindow);
@@ -190,7 +192,7 @@ setScreen(machine *m)
 
 
 
-    //dr
+    erase();
     drawWindows();
 
 
@@ -249,6 +251,7 @@ setScreen(machine *m)
         renLineNum++;
     }
 
+
     //print the registers
     printRegisters(m);
     refresh();
@@ -257,9 +260,9 @@ setScreen(machine *m)
     printMem(m);
 
     //write to the windows
-    refresh();
     wrefresh(codeWindow);
     wrefresh(registersWindow);
+    refresh();
     return;
 
 }
@@ -289,8 +292,8 @@ drawWindows()
     box(registersWindow, 0, 0);
 
     //refresh windows
-    wrefresh(codeWindow);
-    wrefresh(registersWindow);
+   // wrefresh(codeWindow);
+    //wrefresh(registersWindow);
 
 }
 
