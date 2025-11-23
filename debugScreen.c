@@ -150,6 +150,9 @@ printMem(machine *m)
     int y1 = SCREEN_HEI - PAD_BOTTOM + 7 ;
     int x1 = PAD_LEFT;
 
+    //clear the screen 
+    for(int hx = X0 ; hx < X_END ; ++hx) mvaddch(y1,hx,' ');
+
 
     int k1 = m->hp;
     while(x1 < X_END && k1 >=0)
