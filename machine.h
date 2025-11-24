@@ -12,7 +12,11 @@
 typedef enum
 {
     PUSH,
-    ADD, 
+    ADD,
+    MUL,
+    SUB,
+    DIV,
+    MOD,
     PRINTI,
     HALT,
 
