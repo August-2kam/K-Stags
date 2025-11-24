@@ -105,66 +105,6 @@ pop(machine *m)
 }
 
 
-/*#ifdef DEBUG
-void
-runProgram(machine *m)
-{
-    bool running = true;
-    int tos, sos;
-    keypad(stdscr, TRUE);
-
-
-loop:
-        //fetch instruction
-        opcode curr = fetch(m);
-
-
-        //execute
-        switch(curr)
-        {
-            case PUSH:
-                int f = fetch(m);
-                push(m,f);
-                break;
-            case ADD:
-                tos = pop(m);
-                sos = pop(m);
-                push(m , sos + tos);   //TODO : check for overflow 
-                
-                break;
-            case PRINTI:
-                tos = pop(m);
-                printf("%d\n", tos);
-                break;
-
-            case HALT:
-                running = false ;
-                goto exit;
-                break;
-            default:
-                fprintf(stderr, "Unrecognized opcode\n");
-                break;
-        }
-
-        while(true)
-        {
-            int ch = getch();
-            if(ch == '\n' || ch == KEY_ENTER || ch == '\r') 
-            {
-               updateScreen(m); 
-               goto loop;
-            }
-        }
-
-
-exit:
-        endwin();
-    
-}
-
-
-
-#else*/
 void 
 runProgram(machine *m)
 {
@@ -190,8 +130,38 @@ loop:
             case ADD:
                 tos = pop(m);
                 sos = pop(m);
-                push(m , sos + tos);   //TODO : check for overflow 
+                int sum = sos + tos;
+                push(m , sum);   //TODO : check for overflow
                 break;
+
+            case SUB:
+                tos = pop(m);
+                sos = pop(m);
+                int sub = sos - tos;
+                push(m , sub);   //TODO : check for overflow
+                break;
+
+            case MUL:
+                tos = pop(m);
+                sos = pop(m);
+                int mul = sos * tos;
+                push(m , mul);   //TODO : check for overflow
+                break;
+
+            case DIV:
+                tos = pop(m);
+                sos = pop(m);
+                int div = sos / tos;      //check for error div
+                push(m , div);   //TODO : check for overflow
+                break;
+
+            case MOD:
+                tos = pop(m);
+                sos = pop(m);
+                int mod = sos % tos;      //check for error div
+                push(m , mod);   //TODO : check for overflow
+                break;
+
             case PRINTI:
                 tos = pop(m);
                 printf("%d\n", tos);
