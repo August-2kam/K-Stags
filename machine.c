@@ -51,8 +51,8 @@ getCode(machine *m)
     OpcodeIntoCodeArea(m, PUSH);
     OpcodeIntoCodeArea(m, 5);
     OpcodeIntoCodeArea(m, ADD);
-    OpcodeIntoCodeArea(m, ADD);
-    OpcodeIntoCodeArea(m, ADD);
+    OpcodeIntoCodeArea(m, SUB);
+    OpcodeIntoCodeArea(m, MUL);
     OpcodeIntoCodeArea(m, PRINTI);
     OpcodeIntoCodeArea(m, HALT);
 

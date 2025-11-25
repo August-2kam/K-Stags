@@ -11,6 +11,7 @@
 
 typedef enum
 {
+    ALLOC,
     PUSH,
     ADD,
     MUL,
@@ -18,6 +19,14 @@ typedef enum
     DIV,
     MOD,
     PRINTI,
+    BEQ,
+    BNE,
+    BLT,
+    BLE,
+    BGT,
+    BGE,
+    NOT,
+    JUMP,
     HALT,
 
     NO_OPCODE

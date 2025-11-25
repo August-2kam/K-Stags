@@ -123,11 +123,22 @@ setDebugScreenProps(unsigned int size)
 const char* opcodeToString(const opcode op)
 {
     switch(op)
-    {
-        case PUSH:      return "PUSH";
-        case ADD:       return "ADD";
-        case PRINTI:    return "PRINTI";
-        case HALT:      return "HALT";
+    {        case ALLOC:  return "ALLOC";
+        case ADD:    return "ADD";
+        case BEQ:    return "BEQ";
+        case BLT:    return "BLT";
+        case BLE:    return "BLE";
+        case BGT:    return "BGT";
+        case BGE:    return "BGE";
+        case DIV:    return "DIV";
+        case HALT:   return "HALT";
+        case JUMP:   return "JUMP";
+        case PRINTI: return "IPRNT";
+        case MUL:    return "MUL";
+        case MOD:    return "MOD";
+        case NOT:    return "NOT";
+        case PUSH:   return "PUSH";
+        case SUB:    return "SUB";
         default: return "NOP";
 
     }
@@ -137,13 +148,11 @@ const char* opcodeToString(const opcode op)
 
 void 
 printRegisters(machine *m)
-{
-    int x = 2;
-
+{  
+    int x = 2 ;
     mvwprintw(registersWindow, 10 , x , "IP: %d", m->ip  );
     mvwprintw(registersWindow, 15 , x , "SP: %d", m->sp  );
     mvwprintw(registersWindow, 20 , x , "HP: %d", m->hp  );
-
 
 }
 
@@ -224,15 +233,26 @@ setScreen(machine *m)
         {
             // <OPCODE>   <OPERAND>
             case PUSH:
+            case ALLOC:
+            case JUMP:
+            case BGE:
+            case BGT:
+            case BLE:
+            case BLT:
+            case BEQ:
+            case BNE:
                 k+=1;
-                mvwprintw(codeWindow, y, x , "%s%s %d", currLinePointeri, opcodeToString(op), m->code[k++]);
+                mvwprintw(codeWindow, y, x , "<%03d> %s%s %d",  renLineNum, currLinePointeri, opcodeToString(op), m->code[k++]);
                 break;
 
             // <OPCODE>
             case ADD:
+            case SUB:
+            case MUL:
+            case MOD:
             case HALT:
             case PRINTI:
-                mvwprintw(codeWindow, y, x, "%s%s",currLinePointeri, opcodeToString(op));
+                mvwprintw(codeWindow, y, x, "<%03d> %s%s",renLineNum, currLinePointeri, opcodeToString(op));
                 k++;
                 break;
                 
