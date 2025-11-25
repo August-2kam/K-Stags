@@ -67,7 +67,7 @@ getCode(machine *m)
 
 
 //fetch opcode from the code area 
-opcode 
+static inline opcode 
 fetch(machine *m )
 {
     if(m->ip >= MAX_AREA - 1)
@@ -81,7 +81,7 @@ fetch(machine *m )
 
 
 //push operand into the stack
-bool  
+static inline bool  
 push(machine *m , int k)
 {
     if(m->sp <= m->hp) return false;   // stack-heap colission
@@ -90,6 +90,13 @@ push(machine *m , int k)
     m->mem[m->sp--] = k;
 
     return true ;
+}
+
+static inline void
+branch(machine *m , uint32_t addresss)
+{
+    m->ip = address;
+
 }
 
 
@@ -110,6 +117,7 @@ runProgram(machine *m)
 {
     bool running = true;
     int tos , sos ;
+    uint32_t addr;
 
 #ifdef DEBUG
 loop:
@@ -161,6 +169,55 @@ loop:
                 int mod = sos % tos;      //check for error div
                 push(m , mod);   //TODO : check for overflow
                 break;
+
+            case BGT:
+                tos = pop(m);
+                sos = pop(m);
+                addr = fetch(m);
+
+                if(sos > tos) branch(m,addr);
+                break;
+
+
+            case BGE:
+                tos = pop(m);
+                sos = pop(m);
+                addr = fetch(m);
+
+                if(sos >= tos) branch(m,addr);
+                break;
+
+            case BLT:
+                tos = pop(m);
+                sos = pop(m);
+                addr = fetch(m);
+
+                if(sos < tos) branch(m,addr);
+                break;
+
+            case BLE:
+                tos = pop(m);
+                sos = pop(m);
+                addr = fetch(m);
+
+                if(sos <= tos) branch(m,addr);
+                break;
+    
+            case BEQ:
+                tos = pop(m);
+                sos = pop(m);
+                addr = fetch(m);
+
+                if(sos == tos) branch(m,addr);
+                break;
+
+            case BNE:
+                tos = pop(m);
+                sos = pop(m);
+                addr = fetch(m);
+
+                if(sos != tos) branch(m,addr);
+                    break;
 
             case PRINTI:
                 tos = pop(m);

@@ -39,6 +39,7 @@ typedef struct
     uint32_t ip;       //current instruction in the code area we are executing
     uint32_t sp;       // pointer to the top of the stack in memory
     uint32_t hp;       // pointer to the top of the heap  in memory
+    uint32_t fp;       //frame pointer  for the vaiables 
 
 
     //code 
