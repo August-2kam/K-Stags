@@ -1,0 +1,3 @@
+[submodule "maika"]
+	path = maika
+	url = git@github.com:August-2kam/MaikaAsm1.git
