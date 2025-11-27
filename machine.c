@@ -93,7 +93,7 @@ push(machine *m , int k)
 }
 
 static inline void
-branch(machine *m , uint32_t addresss)
+branch(machine *m , uint32_t address)
 {
     m->ip = address;
 
