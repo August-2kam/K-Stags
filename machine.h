@@ -27,6 +27,7 @@ typedef enum
     BGE,
     NOT,
     JUMP,
+    JUMPTO,
     HALT,
 
     NO_OPCODE
