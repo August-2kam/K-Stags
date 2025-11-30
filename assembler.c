@@ -1,10 +1,23 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 
-
+#define currChar(b) b->buffer[bufPointer]
+#define advanceBufPointer(b) b->bufPointer++
+#define endOfBuffer(b) (b)->bufPointer >= (b)->bufferSize
 #define INT_STRING  "0123456789"
+
+
+
+typedef struct 
+{
+    char    *buffer;
+    size_t  bufferSize;
+    size_t  bufPointer;
+    int col,line;
+}srcBuffer;
 
 size_t utility_fileReader(const char *filename , char **input_buffer)
 {
@@ -28,17 +41,7 @@ size_t utility_fileReader(const char *filename , char **input_buffer)
 
 }
 
-typedef struct 
-{
-    char    *buffer;
-    size_t  bufferSize;
-    size_t  bufPointer;
-    int col,line;
-}srcBuffer;
 
-#define currChar(b) b->buffer[bufPointer]
-#define advanceBufPointer(b) b->bufPointer++
-#define endOfBuffer(b) b->bufPointer >= b->bufferSize
 
 //skip white spaces in the 
 void 
@@ -109,24 +112,59 @@ readInt(srcBuffer *sb)
 }
 
 
-
-
-
-
-
-void
-assemble(char *filename ,int **mem)
+void 
+printMnemonic(srcBUffer *sb)
 {
-    srcBuffer sb = (srcBuffer){0};
-    utility_fileReader(filename, &sb->buffer);
+    char *name;
+    int num;
 
+    if(isalpha(currChar(sb)))
+    {
+        int size = readMnemonic(sb, &name);
+        char *pname = malloc(size + 1);
+        strncpy(pname , name , size);
+        printf("%s\n", pname);
+        free(pname);
 
+    }
+    else if(isdigit(currChar(sb)) || currChar(sb)=='-')
+    {
+        int num = readInt(sb);
+        printf("%d\n", num);
 
+    }
 
 }
 
 
+void
+assemble(char *filename ,int *mem)
+{
+    //initalize the source buffer struct
+    srcBuffer sb = (srcBuffer){0};
+    sb.buffer = NULL;
+    sb.bufferSize = utility_fileReader(filename, &sb.buffer);
+    sb.bufPointer = 0;
+    sb.line = 0;
+
+    while(!(endOfBuffer(&sb)))
+    {
+
+        skipSpaces(&sb);
+        printMnemonic(&sb);
+
+    }
+
+}
 
 
+int main(int argc , char *argv[] )
+{
+    int mem[1000];
+    assemble(argv[1], mem);
 
+    return 0;
+
+
+}
 
