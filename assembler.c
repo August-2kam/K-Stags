@@ -4,7 +4,7 @@
 #include <string.h>
 
 
-#define currChar(b) b->buffer[bufPointer]
+#define currChar(b) b->buffer[b->bufPointer]
 #define advanceBufPointer(b) b->bufPointer++
 #define endOfBuffer(b) (b)->bufPointer >= (b)->bufferSize
 #define INT_STRING  "0123456789"
@@ -67,7 +67,11 @@ readMnemonic(srcBuffer *sb, char **start)
     char c = currChar(sb);
     while(c != '\n' ||
           c != ' '  ||
-          c != '\0') size++;
+          c != '\0') 
+    {
+        size++;
+        advanceBufPointer(sb);
+    }
 
 
     return size ;    
@@ -104,6 +108,7 @@ readInt(srcBuffer *sb)
     {
         val = val*10 + k ;
         k = charToInt(INT_STRING ,currChar(sb));
+        advanceBufPointer(sb);
     }
 
     
@@ -113,7 +118,7 @@ readInt(srcBuffer *sb)
 
 
 void 
-printMnemonic(srcBUffer *sb)
+printMnemonic(srcBuffer *sb)
 {
     char *name;
     int num;
@@ -147,13 +152,18 @@ assemble(char *filename ,int *mem)
     sb.bufPointer = 0;
     sb.line = 0;
 
-    while(!(endOfBuffer(&sb)))
+    printf("%s\n", sb.buffer);
+
+
+    skipSpaces(&sb);
+    printMnemonic(&sb);
+
+    /*
+    while(sb.bufferSize > sb.bufPointer)
     {
 
-        skipSpaces(&sb);
-        printMnemonic(&sb);
 
-    }
+    }*/
 
 }
 
