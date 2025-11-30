@@ -6,6 +6,8 @@
 
 #include "machine.h"
 
+opcode 
+
 #ifdef DEBUG 
     #include "debugScreen.h"
 #endif

@@ -54,3 +54,5 @@ typedef struct
 int initMachine(machine *m);
 unsigned int getCode(machine *m);
 void runProgram(machine *m);
+void opcodeIntoMemory(machine *,opcode m);
+void operandIntoMemory(machine *m,int k);
