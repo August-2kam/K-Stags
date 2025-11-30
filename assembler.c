@@ -64,13 +64,17 @@ readMnemonic(srcBuffer *sb, char **start)
     *start = sb->buffer + sb->bufPointer;
     int size = 0;
 
+    printf("ghere\n");
+
     char c = currChar(sb);
     while(c != '\n' ||
           c != ' '  ||
           c != '\0') 
     {
+        printf("%c\n", c);
         size++;
         advanceBufPointer(sb);
+        c = currChar(sb);
     }
 
 
@@ -120,12 +124,15 @@ readInt(srcBuffer *sb)
 void 
 printMnemonic(srcBuffer *sb)
 {
+    skipSpaces(sb);
     char *name;
     int num;
 
     if(isalpha(currChar(sb)))
     {
+        printf("here\n");
         int size = readMnemonic(sb, &name);
+        printf("here\n");
         char *pname = malloc(size + 1);
         strncpy(pname , name , size);
         printf("%s\n", pname);
