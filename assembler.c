@@ -126,6 +126,7 @@ readMnemonic(srcBuffer *sb, char **start)
     return size;
 }
 
+
 opcode mnemonicToOpcode(const char *mnemonic)
 {
    switch(toupper(mnemonic[0]))
@@ -147,7 +148,7 @@ opcode mnemonicToOpcode(const char *mnemonic)
     case 'J':
         if(!strcasecmp(mnemonic, "JUMP")) return  JUMP;
     case 'M':
-        if(!strcaseStrings are equal (case-cmp(mnemonic, "MOD")) return  MOD;
+        if(!strcasecmp(mnemonic, "MOD")) return  MOD;
         if(!strcasecmp(mnemonic, "MUL")) return  MUL;
     case 'N':
         if(!strcasecmp(mnemonic, "NOT")) return  NOT;
@@ -184,7 +185,29 @@ const char* opcodeToMnemonic(opcode op)
        case SUB:   return "SUB";
      default: return "NO_OPCODE"; 
    }
-}void 
+}
+
+void 
+disassembler(machine m)
+{
+
+
+}
+
+void
+skipComment(srcBuffer *sb)
+{
+    if(peekChar(sb) == ';') advance(sb);
+    else return;
+
+    while(peekChar(sb) != '\n' || peekChar(sb) != '\0') advance(sb);
+
+
+}
+
+
+
+void 
 resolveMnemonic(srcBuffer *sb , machine *m) 
 {
     skipSpaces(sb);
@@ -207,27 +230,53 @@ resolveMnemonic(srcBuffer *sb , machine *m)
         opcode op = mnemonicToOpcode(pname);
 
         //insert into memory
+        opcodeIntoMemory(m, op);
         
+        //skip spaces 
+        skipSpaces(sb);
+        skipComment(sb);
 
+        switch(op)
+        {
+            case PUSH:
+            case ALLOC:
+            case BEQ:
+            case BNE:
+            case BLE:
+            case BLT:
+            case BGE:
+            case BGT:
+                //get the operand
+                if (isdigit((unsigned char)peekChar(sb)) || peekChar(sb) == '-') 
+                {
+                    int num = readInt(sb);
+                    operandIntoMemory(m, num);
+                }
+                else 
+                {
+                    fprintf(stderr , "Expected a number at line: %d", sb->line);
+                    exit(1);
+                }
+                break;
+            default:
+                break;
+
+        }
 
         //resolve the mnemonic to opcode 
         free(pname);
 
 
-    } else if (isdigit((unsigned char)peekChar(sb)) || peekChar(sb) == '-') 
+    } else 
     {
-        int num = readInt(sb);
-        printf("NUMBER: %d\n", num);
-    } else if (peekChar(sb) == '\0') {
-        /* nothing to do */
-    } else {
         /* unknown char - skip single char to avoid infinite loop */
         printf("UNKNOWN CHAR '%c' at line %d\n", peekChar(sb), sb->line);
         advance(sb);
     }
 }
 
-void assemble(char *filename, int *mem) 
+
+void assemble(char *filename, int *mem, machine *m) 
 {
     if (!filename) {
         fprintf(stderr, "Usage: assemble <sourcefile>\n");
@@ -245,23 +294,13 @@ void assemble(char *filename, int *mem)
         exit(1);
     }
 
-    /* For demonstration, print whole buffer then parse first token */
-    printf("Source:\n%s\n----\n", sb.buffer);
 
 
     while (sb.bufPointer < sb.bufferSize) {
         skipSpaces(&sb);
         if (peekChar(&sb) == '\0') break;
-        printMnemonic(&sb);
+        resolveMnemonic(&sb, m);
     }
 }
 
-int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        fprintf(stderr, "Usage: %s <sourcefile>\n", argv[0]);
-        return 1;
-    }
-    int mem[1000] = {0};
-    assemble(argv[1], mem);
-    return 0;
-}
+
