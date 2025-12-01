@@ -85,7 +85,7 @@ setDebugScreenProps(unsigned int size)
 
     //code rendering properties 
      codeSize = size;
-     currentLine = 0;
+     currentLine = -1;
 
 
      //init  the color properties 

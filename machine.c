@@ -37,6 +37,18 @@ void OpcodeIntoCodeArea(machine *m, opcode a)
     m->code[m->ip++] = a ;
 }
 
+void opcodeIntoMemory(machine *m, opcode a)
+{
+    m->code[m->ip++] = a ;
+}
+//
+void operandIntoMemory(machine *m, int k)
+{
+
+    m->code[m->ip++] = k ;
+
+}
+
 
 unsigned int
 getCode(machine *m)

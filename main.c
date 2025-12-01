@@ -6,7 +6,7 @@
 
 #include "machine.h"
 
-opcode 
+unsigned int assemble(char *filename , machine *m);
 
 #ifdef DEBUG 
     #include "debugScreen.h"
@@ -25,7 +25,7 @@ main(int argc, char *argv[])
     }
 
     //getCode 
-    unsigned int size = getCode(&stags);
+    unsigned int size = assemble(argv[1], &stags);
     printf("%d\n", size);
 
     //run 

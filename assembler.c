@@ -276,7 +276,8 @@ resolveMnemonic(srcBuffer *sb , machine *m)
 }
 
 
-void assemble(char *filename, int *mem, machine *m) 
+unsigned int
+assemble(char *filename, machine *m) 
 {
     if (!filename) {
         fprintf(stderr, "Usage: assemble <sourcefile>\n");
@@ -298,9 +299,14 @@ void assemble(char *filename, int *mem, machine *m)
 
     while (sb.bufPointer < sb.bufferSize) {
         skipSpaces(&sb);
+        skipComment(&sb);
         if (peekChar(&sb) == '\0') break;
         resolveMnemonic(&sb, m);
     }
+    
+    unsigned int size = m->ip;
+    m->ip = 0;
+    return size ;
 }
 
 
