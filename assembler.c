@@ -12,8 +12,10 @@ typedef struct {
     int     col, line;
 } srcBuffer;
 
-/* safer file reader - returns 0 on failure, file size on success */
-size_t utility_fileReader(const char *filename, char **input_buffer) {
+
+//read file contents into a buffer 
+size_t 
+utility_fileReader(const char *filename, char **input_buffer) {
     FILE *f = fopen(filename, "rb");
     size_t file_size = 0;
 
@@ -36,19 +38,25 @@ size_t utility_fileReader(const char *filename, char **input_buffer) {
     return file_size;
 }
 
-/* safe peek: returns '\0' if at or past end of buffer */
-static char peekChar(srcBuffer *b) {
+
+//peek the buffer 
+static char
+peekChar(srcBuffer *b) 
+{
     if (!b->buffer || b->bufPointer >= b->bufferSize) return '\0';
     return b->buffer[b->bufPointer];
 }
 
-/* advance pointer but never pass bufferSize */
-static void advance(srcBuffer *b) {
-    if (b->bufPointer < b->bufferSize) b->bufPointer++;
-}
+// advance pointer but never pass bufferSize 
+static void 
+advance(srcBuffer *b) {    if (b->bufPointer < b->bufferSize) b->bufPointer++;}
 
-/* skip whitespace and update line count */
-void skipSpaces(srcBuffer *sb) {
+
+
+// skip whitespace and update line count 
+void 
+skipSpaces(srcBuffer *sb) 
+{
     char c = peekChar(sb);
     while (c != '\0' && isspace((unsigned char)c)) {
         if (c == '\n') sb->line++;
@@ -57,30 +65,37 @@ void skipSpaces(srcBuffer *sb) {
     }
 }
 
-/* return index of character in DIGITS or -1 */
-static int charToInt(const char *dig, char c) {
+// return index of character in DIGITS or -1
+static int 
+charToInt(const char *dig, char c) 
+{
     char *p = strchr(dig, c);
     return p ? (int)(p - dig) : -1;
 }
 
-/* read integer (handles optional leading '-') */
-static int readInt(srcBuffer *sb) {
+// read integer (handles optional leading '-')
+static int 
+readInt(srcBuffer *sb) 
+{
     int k, val = 0, neg = 0;
     char c = peekChar(sb);
 
-    if (c == '-') {
+    if (c == '-') 
+    {
         neg = 1;
         advance(sb);
         c = peekChar(sb);
     }
 
-    if (!isdigit((unsigned char)c)) {
+    if (!isdigit((unsigned char)c)) 
+    {
         fprintf(stderr, "ASVM: line %d: expected a digit after optional sign\n", sb->line);
         exit(1);
     }
 
     k = charToInt(INT_STRING, c);
-    while (k >= 0) {
+    while (k >= 0) 
+    {
         val = val * 10 + k;
         advance(sb);
         c = peekChar(sb);
@@ -90,8 +105,10 @@ static int readInt(srcBuffer *sb) {
     return neg ? -val : val;
 }
 
-/* read mnemonic: returns length and sets *start to pointer inside buffer */
-int readMnemonic(srcBuffer *sb, char **start) {
+//read mnemonic: returns length and sets *start to pointer inside buffer
+int 
+readMnemonic(srcBuffer *sb, char **start) 
+{
     skipSpaces(sb);
     *start = sb->buffer + sb->bufPointer;
     int size = 0;
@@ -107,10 +124,15 @@ int readMnemonic(srcBuffer *sb, char **start) {
     return size;
 }
 
-void printMnemonic(srcBuffer *sb) {
+
+
+void 
+printMnemonic(srcBuffer *sb) 
+{
     skipSpaces(sb);
     char *name;
-    if (isalpha((unsigned char)peekChar(sb))) {
+    if (isalpha((unsigned char)peekChar(sb))) 
+    {
         int size = readMnemonic(sb, &name);
         if (size <= 0) return;
         char *pname = malloc(size + 1);
@@ -122,7 +144,8 @@ void printMnemonic(srcBuffer *sb) {
         pname[size] = '\0'; /* important: terminate */
         printf("MNEMONIC: '%s'\n", pname);
         free(pname);
-    } else if (isdigit((unsigned char)peekChar(sb)) || peekChar(sb) == '-') {
+    } else if (isdigit((unsigned char)peekChar(sb)) || peekChar(sb) == '-') 
+    {
         int num = readInt(sb);
         printf("NUMBER: %d\n", num);
     } else if (peekChar(sb) == '\0') {
@@ -134,7 +157,8 @@ void printMnemonic(srcBuffer *sb) {
     }
 }
 
-void assemble(char *filename, int *mem) {
+void assemble(char *filename, int *mem) 
+{
     if (!filename) {
         fprintf(stderr, "Usage: assemble <sourcefile>\n");
         exit(1);
