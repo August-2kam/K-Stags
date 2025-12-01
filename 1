@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "machine.h"
-
 #define INT_STRING  "0123456789"
 
 typedef struct {
@@ -126,72 +124,15 @@ readMnemonic(srcBuffer *sb, char **start)
     return size;
 }
 
-opcode mnemonicToOpcode(const char *mnemonic)
-{
-   switch(toupper(mnemonic[0]))
-   {
-    case 'A':
-        if(!strcasecmp(mnemonic, "ADD")) return  ADD;
-        if(!strcasecmp(mnemonic, "ALLOC")) return  ALLOC;
-    case 'B':
-        if(!strcasecmp(mnemonic, "BEQ")) return  BEQ;
-        if(!strcasecmp(mnemonic, "BGE")) return  BGE;
-        if(!strcasecmp(mnemonic, "BGT")) return  BGT;
-        if(!strcasecmp(mnemonic, "BLE")) return  BLE;
-        if(!strcasecmp(mnemonic, "BLT")) return  BLT;
-        if(!strcasecmp(mnemonic, "BNE")) return  BNE;
-    case 'D':
-        if(!strcasecmp(mnemonic, "DIV")) return  DIV;
-    case 'H':
-        if(!strcasecmp(mnemonic, "HALT")) return  HALT;
-    case 'J':
-        if(!strcasecmp(mnemonic, "JUMP")) return  JUMP;
-    case 'M':
-        if(!strcaseStrings are equal (case-cmp(mnemonic, "MOD")) return  MOD;
-        if(!strcasecmp(mnemonic, "MUL")) return  MUL;
-    case 'N':
-        if(!strcasecmp(mnemonic, "NOT")) return  NOT;
-    case 'P':
-        if(!strcasecmp(mnemonic, "PRINTI")) return  PRINTI;
-        if(!strcasecmp(mnemonic, "PUSH")) return  PUSH;
-    case 'S':
-        if(!strcasecmp(mnemonic, "SUB")) return  SUB;
-     default: return NO_OPCODE;
-   }
-}
 
 
-const char* opcodeToMnemonic(opcode op)
-{
-   switch(op)
-   {
-       case ADD:   return "ADD";
-       case ALLOC:   return "ALLOC";
-       case BEQ:   return "BEQ";
-       case BGE:   return "BGE";
-       case BGT:   return "BGT";
-       case BLE:   return "BLE";
-       case BLT:   return "BLT";
-       case BNE:   return "BNE";
-       case DIV:   return "DIV";
-       case HALT:   return "HALT";
-       case JUMP:   return "JUMP";
-       case MOD:   return "MOD";
-       case MUL:   return "MUL";
-       case NOT:   return "NOT";
-       case PRINTI:   return "PRINTI";
-       case PUSH:   return "PUSH";
-       case SUB:   return "SUB";
-     default: return "NO_OPCODE"; 
-   }
-}void 
-resolveMnemonic(srcBuffer *sb , machine *m) 
+void 
+printMnemonic(srcBuffer *sb) 
 {
     skipSpaces(sb);
     char *name;
     if (isalpha((unsigned char)peekChar(sb))) 
     {
-        //get the menmonic name 
         int size = readMnemonic(sb, &name);
         if (size <= 0) return;
         char *pname = malloc(size + 1);
@@ -200,15 +141,8 @@ resolveMnemonic(srcBuffer *sb , machine *m)
             exit(1);
         }
         strncpy(pname, name, size);
-        pname[size] = '\0'; //sentinel
-        
-
-        //get the opcode 
-        opcode op = mnemonicToOpcode(pname);
-
-        //insert into memory
-        
-
+        pname[size] = '\0'; /* important: terminate */
+        printf("MNEMONIC: '%s'\n", pname);
 
         //resolve the mnemonic to opcode 
         free(pname);
