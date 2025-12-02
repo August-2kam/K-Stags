@@ -238,6 +238,7 @@ resolveMnemonic(srcBuffer *sb , machine *m)
 
         switch(op)
         {
+
             case PUSH:
             case ALLOC:
             case BEQ:

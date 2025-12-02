@@ -146,6 +146,8 @@ const char* opcodeToString(const opcode op)
 
 }
 
+
+//print the registers on the register window
 void 
 printRegisters(machine *m)
 {  
@@ -156,6 +158,8 @@ printRegisters(machine *m)
 
 }
 
+
+//printing the disassembled code from memory on the code window
 void
 printMem(machine *m)
 {
@@ -191,6 +195,8 @@ printMem(machine *m)
     refresh();
 }
 
+
+//set the debugging window
 void
 setScreen(machine *m)
 {
@@ -287,6 +293,8 @@ setScreen(machine *m)
 
 }
 
+
+//update the screen by calling the setScreen function with new variables
 void
 updateScreen(machine *m)
 {
