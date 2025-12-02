@@ -12,6 +12,8 @@ unsigned int assemble(char *filename , machine *m);
     #include "debugScreen.h"
 #endif
 
+
+
 int 
 main(int argc, char *argv[])
 {   

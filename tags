@@ -1,0 +1,106 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ADD	machine.h	/^    ADD,$/;"	e	enum:__anon1
+ALLOC	machine.h	/^    ALLOC,$/;"	e	enum:__anon1
+BEQ	machine.h	/^    BEQ,$/;"	e	enum:__anon1
+BGE	machine.h	/^    BGE,$/;"	e	enum:__anon1
+BGT	machine.h	/^    BGT,$/;"	e	enum:__anon1
+BLE	machine.h	/^    BLE,$/;"	e	enum:__anon1
+BLT	machine.h	/^    BLT,$/;"	e	enum:__anon1
+BNE	machine.h	/^    BNE,$/;"	e	enum:__anon1
+CC	Makefile	/^CC      = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS  = -Wall -g$/;"	m
+CODE_WIN_X	debugScreen.c	/^unsigned int CODE_WIN_X;$/;"	v
+CODE_WIN_Y	debugScreen.c	/^unsigned int CODE_WIN_Y;$/;"	v
+DEBUG	Makefile	/^DEBUG ?= 0$/;"	m
+DIV	machine.h	/^    DIV,$/;"	e	enum:__anon1
+HALT	machine.h	/^    HALT,$/;"	e	enum:__anon1
+INT_STRING	assembler.c	8;"	d	file:
+JUMP	machine.h	/^    JUMP,$/;"	e	enum:__anon1
+JUMPTO	machine.h	/^    JUMPTO,$/;"	e	enum:__anon1
+LDA	machine.h	/^    LDA,$/;"	e	enum:__anon1
+LIBS	Makefile	/^LIBS	= -lncurses$/;"	m
+MAX_AREA	machine.h	9;"	d
+MOD	machine.h	/^    MOD,$/;"	e	enum:__anon1
+MUL	machine.h	/^    MUL,$/;"	e	enum:__anon1
+NOT	machine.h	/^    NOT,$/;"	e	enum:__anon1
+NO_OPCODE	machine.h	/^    NO_OPCODE$/;"	e	enum:__anon1
+NUM_REGISTERS	machine.h	39;"	d
+OpcodeIntoCodeArea	machine.c	/^void OpcodeIntoCodeArea(machine *m, opcode a)$/;"	f
+PAD_BOTTOM	debugScreen.c	/^int PAD_BOTTOM;$/;"	v
+PAD_BOTTOM_PER	debugScreen.c	/^float PAD_BOTTOM_PER = 0.30;$/;"	v
+PAD_LEFT	debugScreen.c	/^int PAD_LEFT;$/;"	v
+PAD_LEFT_PER	debugScreen.c	/^float PAD_LEFT_PER = 0.10;$/;"	v
+PAD_RIGHT	debugScreen.c	/^int PAD_RIGHT;$/;"	v
+PAD_RIGHT_PER	debugScreen.c	/^float PAD_RIGHT_PER = 0.10;$/;"	v
+PAD_TOP	debugScreen.c	/^int PAD_TOP;$/;"	v
+PAD_TOP_PER	debugScreen.c	/^float PAD_TOP_PER = 0.10;$/;"	v
+PRINTI	machine.h	/^    PRINTI,$/;"	e	enum:__anon1
+PUSH	machine.h	/^    PUSH,$/;"	e	enum:__anon1
+REG_WIN_X	debugScreen.c	/^unsigned int REG_WIN_X;$/;"	v
+REG_WIN_Y	debugScreen.c	/^unsigned int REG_WIN_Y;$/;"	v
+SCREEN_HEI	debugScreen.c	/^unsigned int SCREEN_HEI;$/;"	v
+SCREEN_WID	debugScreen.c	/^unsigned int SCREEN_WID;$/;"	v
+SRC	Makefile	/^SRC     = main.c \\$/;"	m
+STO	machine.h	/^    STO,$/;"	e	enum:__anon1
+SUB	machine.h	/^    SUB,$/;"	e	enum:__anon1
+TARGET	Makefile	/^TARGET  = stags$/;"	m
+USABLE_H	debugScreen.c	/^int USABLE_H;$/;"	v
+USABLE_W	debugScreen.c	/^int USABLE_W;$/;"	v
+VAL	machine.h	/^    VAL,$/;"	e	enum:__anon1
+WIN_HEIGHT	debugScreen.c	/^unsigned int WIN_HEIGHT;$/;"	v
+WIN_WIDTH	debugScreen.c	/^unsigned int WIN_WIDTH;$/;"	v
+advance	assembler.c	/^advance(srcBuffer *b) {    if (b->bufPointer < b->bufferSize) b->bufPointer++;}$/;"	f	file:
+assemble	assembler.c	/^assemble(char *filename, machine *m) $/;"	f
+branch	machine.c	/^branch(machine *m , uint32_t address)$/;"	f	file:
+bufPointer	assembler.c	/^    size_t  bufPointer;$/;"	m	struct:__anon3	file:
+buffer	assembler.c	/^    char    *buffer;$/;"	m	struct:__anon3	file:
+bufferSize	assembler.c	/^    size_t  bufferSize;$/;"	m	struct:__anon3	file:
+charToInt	assembler.c	/^charToInt(const char *dig, char c) $/;"	f	file:
+code	machine.h	/^    int* code;$/;"	m	struct:__anon2
+codeSize	debugScreen.c	/^unsigned int codeSize;$/;"	v
+codeWindow	debugScreen.c	/^WINDOW *codeWindow;$/;"	v
+col	assembler.c	/^    int     col, line;$/;"	m	struct:__anon3	file:
+currentLine	debugScreen.c	/^signed int currentLine = 0;$/;"	v
+destroyWindows	debugScreen.c	/^destroyWindows()$/;"	f
+disassembler	assembler.c	/^disassembler(machine m)$/;"	f
+drawWindows	debugScreen.c	/^drawWindows()$/;"	f
+fetch	machine.c	/^fetch(machine *m )$/;"	f	file:
+fp	machine.h	/^    uint32_t fp;       \/\/frame pointer  for the vaiables $/;"	m	struct:__anon2
+hp	machine.h	/^    uint32_t hp;       \/\/ pointer to the top of the heap  in memory$/;"	m	struct:__anon2
+initMachine	machine.c	/^initMachine(machine *m)$/;"	f
+ip	machine.h	/^    uint32_t ip;       \/\/current instruction in the code area we are executing$/;"	m	struct:__anon2
+line	assembler.c	/^    int     col, line;$/;"	m	struct:__anon3	file:
+machine	machine.h	/^} machine;$/;"	t	typeref:struct:__anon2
+main	main.c	/^main(int argc, char *argv[])$/;"	f
+mem	machine.h	/^     int* mem;$/;"	m	struct:__anon2
+mnemonicToOpcode	assembler.c	/^opcode mnemonicToOpcode(const char *mnemonic)$/;"	f
+opcode	machine.h	/^}opcode;$/;"	t	typeref:enum:__anon1
+opcodeIntoMemory	machine.c	/^void opcodeIntoMemory(machine *m, opcode a)$/;"	f
+opcodeToMnemonic	assembler.c	/^const char* opcodeToMnemonic(opcode op)$/;"	f
+opcodeToString	debugScreen.c	/^const char* opcodeToString(const opcode op)$/;"	f
+operandIntoMemory	machine.c	/^void operandIntoMemory(machine *m, int k)$/;"	f
+peekChar	assembler.c	/^peekChar(srcBuffer *b) $/;"	f	file:
+pop	machine.c	/^pop(machine *m)$/;"	f
+printColor	debugScreen.c	/^bool printColor;$/;"	v
+printMem	debugScreen.c	/^printMem(machine *m)$/;"	f
+printRegisters	debugScreen.c	/^printRegisters(machine *m)$/;"	f
+push	machine.c	/^push(machine *m , int k)$/;"	f	file:
+readInt	assembler.c	/^readInt(srcBuffer *sb) $/;"	f	file:
+readMnemonic	assembler.c	/^readMnemonic(srcBuffer *sb, char **start) $/;"	f
+registersWindow	debugScreen.c	/^WINDOW *registersWindow;$/;"	v
+renLineNum	debugScreen.c	/^unsigned int renLineNum  = 0;$/;"	v
+resolveMnemonic	assembler.c	/^resolveMnemonic(srcBuffer *sb , machine *m) $/;"	f
+runProgram	machine.c	/^runProgram(machine *m)$/;"	f
+setDebugScreenProps	debugScreen.c	/^setDebugScreenProps(unsigned int size)$/;"	f
+setScreen	debugScreen.c	/^setScreen(machine *m)$/;"	f
+skipComment	assembler.c	/^skipComment(srcBuffer *sb)$/;"	f
+skipSpaces	assembler.c	/^skipSpaces(srcBuffer *sb) $/;"	f
+sp	machine.h	/^    uint32_t sp;       \/\/ pointer to the top of the stack in memory$/;"	m	struct:__anon2
+srcBuffer	assembler.c	/^} srcBuffer;$/;"	t	typeref:struct:__anon3	file:
+updateScreen	debugScreen.c	/^updateScreen(machine *m)$/;"	f
+utility_fileReader	assembler.c	/^utility_fileReader(const char *filename, char **input_buffer) {$/;"	f

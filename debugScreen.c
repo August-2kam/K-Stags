@@ -42,6 +42,10 @@ unsigned int renLineNum  = 0;
 
 signed int currentLine = 0;
 
+
+bool cutoff = false;
+unsigned int cutoffStart = 0;
+
 bool printColor;
 
 WINDOW *codeWindow;
@@ -225,7 +229,9 @@ setScreen(machine *m)
 
 
     //print the code
-    int k = 0;
+
+    int k = cutoff ? cutoffStart : 0;
+
     opcode op ;
     while(k < codeSize)     
     {
@@ -261,7 +267,7 @@ setScreen(machine *m)
             case BEQ:
             case BNE:
                 k+=1;
-                mvwprintw(codeWindow, y, x , "<%03d> %s%s %d",  renLineNum, currLinePointeri, opcodeToString(op), m->code[k++]);
+                mvwprintw(codeWindow, y, x , "<%03d> %s%s %d",  renLineNum, currLinePointeri, opcodeToMnemonic(op), m->code[k++]);
                 break;
 
             // <OPCODE>
@@ -271,7 +277,7 @@ setScreen(machine *m)
             case MOD:
             case HALT:
             case PRINTI:
-                mvwprintw(codeWindow, y, x, "<%03d> %s%s",renLineNum, currLinePointeri, opcodeToString(op));
+                mvwprintw(codeWindow, y, x, "<%03d> %s%s",renLineNum, currLinePointeri, opcodeToMnemonic(op));
                 k++;
                 break;
                 

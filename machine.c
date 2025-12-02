@@ -50,33 +50,6 @@ void operandIntoMemory(machine *m, int k)
 }
 
 
-unsigned int
-getCode(machine *m)
-{
-    unsigned int size;
-    OpcodeIntoCodeArea(m, PUSH);
-    OpcodeIntoCodeArea(m, 1);
-    OpcodeIntoCodeArea(m, PUSH);
-    OpcodeIntoCodeArea(m, 2);
-    OpcodeIntoCodeArea(m, PUSH);
-    OpcodeIntoCodeArea(m, 2);
-    OpcodeIntoCodeArea(m, PUSH);
-    OpcodeIntoCodeArea(m, 5);
-    OpcodeIntoCodeArea(m, ADD);
-    OpcodeIntoCodeArea(m, SUB);
-    OpcodeIntoCodeArea(m, MUL);
-    OpcodeIntoCodeArea(m, PRINTI);
-    OpcodeIntoCodeArea(m, HALT);
-
-    size = m->ip;
-
-    //reset the ip
-    m->ip = 0;
-
-    return size;
-}
-
-
 
 //fetch opcode from the code area 
 static inline opcode 
@@ -151,6 +124,16 @@ loop:
                  m->sp = m->sp - varNum ;
                  break ;
                 }
+            case LDA:
+                push(m ,m->fp +fetch(m));
+                break;
+            case VAL:
+                //deference the address at tos 
+                tos = pop(m);
+                push(m , m->mem[tos]);
+                break;
+
+
             case PUSH:
                 push(m,fetch(m) );
                 break;
@@ -245,6 +228,7 @@ loop:
             case HALT:
                 running = false ;
 #ifdef DEBUG
+                printf("halted");
                 int ch = getch();
                 goto exit; 
 #endif 

@@ -19,7 +19,8 @@ typedef enum
     DIV,
     MOD,
     LDA,
-    VAL,    
+    VAL,
+    STO,
     PRINTI,
     BEQ,
     BNE,
@@ -58,3 +59,4 @@ unsigned int getCode(machine *m);
 void runProgram(machine *m);
 void opcodeIntoMemory(machine *,opcode m);
 void operandIntoMemory(machine *m,int k);
+const char *opcodeToMnemonic(opcode op);

@@ -160,6 +160,7 @@ opcode mnemonicToOpcode(const char *mnemonic)
         if(!strcasecmp(mnemonic, "PUSH")) return  PUSH;
     case 'S':
         if(!strcasecmp(mnemonic, "SUB")) return  SUB;
+        if(!strcasecmp(mnemonic, "STO")) return  STO;
     case 'V':
         if(!strcasecmp(mnemonic, "VAL")) return  VAL;
      default: return NO_OPCODE;
@@ -189,6 +190,7 @@ const char* opcodeToMnemonic(opcode op)
        case PRINTI:   return "PRINTI";
        case PUSH:   return "PUSH";
        case SUB:   return "SUB";
+       case STO:   return "STO";
        case VAL:   return "VAL";
      default: return "NO_OPCODE"; 
    
