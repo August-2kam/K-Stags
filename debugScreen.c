@@ -36,7 +36,7 @@ unsigned int REG_WIN_X;
 unsigned int REG_WIN_Y;
 
 unsigned int renLineNum  = 0;
-unsigned int currentLine = 0;
+signed int currentLine = 0;
 
 bool printColor;
 

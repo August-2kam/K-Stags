@@ -26,7 +26,6 @@ main(int argc, char *argv[])
 
     //getCode 
     unsigned int size = assemble(argv[1], &stags);
-    printf("%d\n", size);
 
     //run 
 #ifdef DEBUG

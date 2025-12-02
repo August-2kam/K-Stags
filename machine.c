@@ -238,6 +238,7 @@ loop:
             case HALT:
                 running = false ;
 #ifdef DEBUG
+                int ch = getch();
                 goto exit; 
 #endif 
                 break;
