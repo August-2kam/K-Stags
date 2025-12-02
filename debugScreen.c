@@ -35,6 +35,8 @@ unsigned int CODE_WIN_Y;
 unsigned int REG_WIN_X;
 unsigned int REG_WIN_Y;
 
+
+
 unsigned int renLineNum  = 0;
 signed int currentLine = 0;
 
@@ -65,20 +67,29 @@ setDebugScreenProps(unsigned int size)
     SCREEN_WID = COLS;
     SCREEN_HEI = LINES;
 
+   
+
+
+    //the padding for the whole window 
     PAD_LEFT   = (int)(SCREEN_WID * PAD_LEFT_PER);
     PAD_RIGHT  = (int)(SCREEN_WID * PAD_RIGHT_PER);
     PAD_TOP    = (int)(SCREEN_HEI * PAD_TOP_PER);
     PAD_BOTTOM = (int)(SCREEN_HEI * PAD_BOTTOM_PER);
 
+    //usable window and height for the application based on the padding
     USABLE_W   = SCREEN_WID - PAD_LEFT - PAD_RIGHT;
     USABLE_H   = SCREEN_HEI - PAD_TOP - PAD_BOTTOM;
 
+    //usable dimensions for the code window and the register window
     WIN_WIDTH  = USABLE_W/2;
     WIN_HEIGHT = USABLE_H;
 
+
+    //code window top left coordinates
     CODE_WIN_X = PAD_LEFT;
     CODE_WIN_Y = PAD_TOP;
 
+    //register window top left cordinates 
     REG_WIN_X  = PAD_LEFT + WIN_WIDTH;
     REG_WIN_Y  = PAD_TOP;
 
