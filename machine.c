@@ -144,6 +144,13 @@ loop:
         //execute
         switch(curr)
         {
+            case ALLOC:
+                {
+                //allocate the space for global variables at the end of memory 
+                 int varNum = fetch(m);
+                 m->sp = m->sp - varNum ;
+                 break ;
+                }
             case PUSH:
                 push(m,fetch(m) );
                 break;

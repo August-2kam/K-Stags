@@ -18,6 +18,8 @@ typedef enum
     SUB,
     DIV,
     MOD,
+    LDA,
+    VAL,    
     PRINTI,
     BEQ,
     BNE,

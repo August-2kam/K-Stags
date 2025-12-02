@@ -38,6 +38,8 @@ unsigned int REG_WIN_Y;
 
 
 unsigned int renLineNum  = 0;
+
+
 signed int currentLine = 0;
 
 bool printColor;
@@ -96,7 +98,7 @@ setDebugScreenProps(unsigned int size)
 
     //code rendering properties 
      codeSize = size;
-     currentLine = -1;
+     currentLine = 0;
 
 
      //init  the color properties 
