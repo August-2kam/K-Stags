@@ -6,6 +6,7 @@
 #include "machine.h"
 
 
+#define min(a , b)  a > b  ? b : a 
 
 unsigned int codeSize;
 
@@ -224,8 +225,15 @@ setScreen(machine *m)
 
 
 
+
     erase();
     drawWindows();
+
+    if(currentLine >= WIN_HEIGHT / 2)  
+    { cutoff      = true;
+      cutoffStart = currentLine - (WIN_HEIGHT / 2);
+    }
+       
 
 
     //print the code
@@ -317,6 +325,8 @@ setScreen(machine *m)
 void
 updateScreen(machine *m)
 {
+    if(currentLine == 0) cutoffStart = m->ip;
+
     currentLine++;
     setScreen(m);attroff(COLOR_PAIR(1));
 
