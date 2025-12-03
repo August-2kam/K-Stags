@@ -238,9 +238,10 @@ setScreen(machine *m)
 
     //print the code
 
-    int k = cutoff ? cutoffStart : 0;
+    int k = 0;
 
     opcode op ;
+    opcode nextOp;
     while(k < codeSize)     
     {
         //set the color if the current  executed line is the one being drawn
@@ -260,7 +261,7 @@ setScreen(machine *m)
 
 
         //get the opcode
-        op = m->code[k];
+        op = m->code[k++];
 
         switch(op)
         {
@@ -274,8 +275,12 @@ setScreen(machine *m)
             case BLT:
             case BEQ:
             case BNE:
-                k+=1;
-                mvwprintw(codeWindow, y, x , "<%03d> %s%s %d",  renLineNum, currLinePointeri, opcodeToMnemonic(op), m->code[k++]);
+                nextOp = m->code[k++];
+
+                if(cutoff && (cutoffStart > 0) && (renLineNum < cutoffStart)) continue;
+
+
+                mvwprintw(codeWindow, y, x , "<%03d> %s%s %d",  renLineNum, currLinePointeri, opcodeToMnemonic(op), nextOp);
                 break;
 
             // <OPCODE>
@@ -284,14 +289,16 @@ setScreen(machine *m)
             case MUL:
             case MOD:
             case HALT:
-            case PRINTI:
+            case PRINTI: 
+ 
+                if(cutoff && (cutoffStart > 0) && (renLineNum < cutoffStart)) continue;
+
                 mvwprintw(codeWindow, y, x, "<%03d> %s%s",renLineNum, currLinePointeri, opcodeToMnemonic(op));
-                k++;
                 break;
-                
             default:
+
+
                 printw("UNRECOGNIZED OP\n");
-                k++;
                 break;
         }
         if(currentLine == renLineNum)
@@ -319,7 +326,6 @@ setScreen(machine *m)
     return;
 
 }
-
 
 //update the screen by calling the setScreen function with new variables
 void
