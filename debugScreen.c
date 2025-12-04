@@ -45,7 +45,7 @@ signed int currentLine = 0;
 
 
 bool cutoff = false;
-unsigned int cutoffStart = 0;
+int cutoffStart = -1;
 
 bool printColor;
 
@@ -214,6 +214,11 @@ printMem(machine *m)
 }
 
 
+//(rendering_lines)      (a, a + WIN_HEIGHT)
+//(win_rendering)        (1, WIN_HEIGHT)
+//MAP = 1 + (X - a)
+
+
 //set the debugging window
 void
 setScreen(machine *m)
@@ -221,7 +226,7 @@ setScreen(machine *m)
     char *currLinePointeri = " ";
 
 
-    renLineNum = 0;
+    renLineNum = 1;
 
 
 
@@ -229,9 +234,9 @@ setScreen(machine *m)
     erase();
     drawWindows();
 
-    if(currentLine >= WIN_HEIGHT / 2)  
+    if(currentLine >= 10)  
     { cutoff      = true;
-      cutoffStart = currentLine - (WIN_HEIGHT / 2);
+      cutoffStart = currentLine -  10;
     }
        
 
@@ -253,11 +258,12 @@ setScreen(machine *m)
         }
 
         //cordinates inside the inner area
-        int y = renLineNum + 1;
+        int y = renLineNum 
         int x = 2;
 
+
         //dont print outside the window 
-        if(y >= (WIN_WIDTH -1 )) break;
+        if(y >= (WIN_HEIGHT -1 )) break;
 
 
         //get the opcode
@@ -277,7 +283,7 @@ setScreen(machine *m)
             case BNE:
                 nextOp = m->code[k++];
 
-                if(cutoff && (cutoffStart > 0) && (renLineNum < cutoffStart)) continue;
+                if(cutoff && (cutoffStart >= 0) && (renLineNum < cutoffStart)) goto next;
 
 
                 mvwprintw(codeWindow, y, x , "<%03d> %s%s %d",  renLineNum, currLinePointeri, opcodeToMnemonic(op), nextOp);
@@ -291,7 +297,7 @@ setScreen(machine *m)
             case HALT:
             case PRINTI: 
  
-                if(cutoff && (cutoffStart > 0) && (renLineNum < cutoffStart)) continue;
+                if(cutoff && (cutoffStart >= 0) && (renLineNum <= cutoffStart)) goto next;
 
                 mvwprintw(codeWindow, y, x, "<%03d> %s%s",renLineNum, currLinePointeri, opcodeToMnemonic(op));
                 break;
@@ -301,6 +307,9 @@ setScreen(machine *m)
                 printw("UNRECOGNIZED OP\n");
                 break;
         }
+
+next:
+
         if(currentLine == renLineNum)
         {
 
@@ -309,6 +318,8 @@ setScreen(machine *m)
         }
 
         renLineNum++;
+
+        if(cutoff) cutoffStart++;
     }
 
 
@@ -331,7 +342,6 @@ setScreen(machine *m)
 void
 updateScreen(machine *m)
 {
-    if(currentLine == 0) cutoffStart = m->ip;
 
     currentLine++;
     setScreen(m);attroff(COLOR_PAIR(1));
